@@ -1,6 +1,5 @@
 import pandas
 import os
-import openpyxl
 
 datas = []
 text_datas = []
@@ -44,9 +43,8 @@ for files_txt in os.listdir("Run tables"):
             with open(f"Run tables\\run_{files_txt}", "a", encoding="utf-8") as file:
                 file.write(
                     x.split(' ')[1] + ' ' + x.split(' ')[2] \
-                    + ' ' + x.split(' ')[3] + ' ' + x.split(' ')[-1] + "\n"
+                    + ' ' + x.split(' ')[3] + ' ' + x.split(' ')[-2] + ' ' + x.split(' ')[-1] + "\n"
                 )
-
         os.remove(f"Run tables\\{files_txt}")
 count_file_run = 1
 for run_files_txt in os.listdir("Run tables"):
@@ -80,7 +78,6 @@ all_runners_nickname_set = list(set(all_runners_nickname))
 
 for check in all_runners_nickname_set:
     for check_nick in range(len(copy_datas)):
-
         if check.split(' ') in copy_datas[check_nick]:
             with open(f"Run tables\\result_datas.txt", "a", encoding="utf-8") as all_result_with_name:
 
@@ -88,7 +85,8 @@ for check in all_runners_nickname_set:
                     datas[check_nick][copy_datas[check_nick].index(check.split(' '))][0] + " " + \
                     datas[check_nick][copy_datas[check_nick].index(check.split(' '))][1] + " " + \
                     datas[check_nick][copy_datas[check_nick].index(check.split(' '))][2] + " " + \
-                    datas[check_nick][copy_datas[check_nick].index(check.split(' '))][3] + "\n"
+                    datas[check_nick][copy_datas[check_nick].index(check.split(' '))][3] + " " + \
+                    datas[check_nick][copy_datas[check_nick].index(check.split(' '))][4] + "\n"
                 )
             all_result_with_name.close()
 
@@ -99,6 +97,7 @@ for check in all_runners_nickname_set:
                     check.split(' ')[0] + " " + \
                     check.split(' ')[1] + " " + \
                     check.split(' ')[2] + " " + \
+                    check.split(' ')[3] + " " + \
                     "-" + "\n"
                 )
             all_result_with_name_t.close()
@@ -107,6 +106,7 @@ result_open = open("Run tables\\result_datas.txt", "r", encoding="utf-8").readli
 
 result_open = [x.strip('\n').split(' ') for x in result_open]
 counter_users = 1
+
 
 pre_write_in_exel = []
 
@@ -132,15 +132,15 @@ for pre in range(len(pre_write_in_exel)):
 for count_of_plus in pre_write_in_exel:
     zach = 0
     for run_len in range(len(datas)):
-        if count_of_plus[3:-1][run_len] in ['660', '665', '670', '675', '680', '690', '700']:
+        if count_of_plus[4:-1][run_len] in ['660', '665', '670', '675', '680', '690', '700']:
             zach += 1
     count_of_plus.append(str(zach))
 
 for count_of_sum_mark in pre_write_in_exel:
     sum_mark = 0
     for sum_num in range(len(datas)):
-        if count_of_sum_mark[3:-2][sum_num] != '-':
-            sum_mark += int(count_of_sum_mark[3:-2][sum_num])
+        if count_of_sum_mark[4:-2][sum_num] != '-':
+            sum_mark += int(count_of_sum_mark[4:-2][sum_num])
     count_of_sum_mark.append(str(sum_mark))
 
 pre_write_in_exel_sort = sorted(pre_write_in_exel, key=lambda win: int(win[-1]), reverse=True)
@@ -149,7 +149,9 @@ for win_place, value in enumerate(pre_write_in_exel_sort, start=1):
     value.extend([str(win_place)])
 
 sort_members_by_run_count = reversed(sorted(pre_write_in_exel_sort, key=lambda run: int(run[-4])))
-
+os.remove("Run tables\\result_datas.txt")
 # Write data in Exel .xlsx
 for datas_for_xlsx in sort_members_by_run_count:
-    print(*datas_for_xlsx)
+    with open("Run tables\\Merged tables.txt", "a", encoding="utf-8") as result:
+        result.write(' '.join(datas_for_xlsx) + "\n")
+    result.close()
