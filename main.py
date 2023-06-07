@@ -130,14 +130,10 @@ for pre in range(len(pre_write_in_exel)):
 
 
 for count_of_plus in pre_write_in_exel:
-    zach = 0
     all_zach = 0
     for run_len in range(len(datas)):
-        if count_of_plus[4:-1][run_len] in ['660', '665', '670', '675', '680', '690', '700']:
-            zach += 1
         if count_of_plus[4:-1][run_len] != "0" and count_of_plus[4:-1][run_len] != "-":
             all_zach += 1
-    count_of_plus.append(str(zach))
     count_of_plus.append(str(all_zach))
 
 for count_of_sum_mark in pre_write_in_exel:
